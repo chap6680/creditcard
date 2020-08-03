@@ -9,47 +9,6 @@
 
     <script language=\"JavaScript\" src=\"https://js.paygateway.com/secure_payment/v1/globalpayments.js\"></script>
 
-    <script type="text/javascript">
-        function initGlobalPayments() {
-            GlobalPayments.configure({ 
-                  "X-GP-Api-Key": "CBRZ0ddOrRyuQa7P5WvAaEWL04TSReEH",
-                  "X-GP-Environment": "test" 
-                }); 
-            
-            
-            var cardForm = GlobalPayments.ui.form({   fields: { 
-                "card-number": { 
-                  target: "#card-number", 
-                      placeholder: "•••• •••• •••• ••••",
-                },
-                "card-expiration": {
-                  target: "#card-expiration",
-                  placeholder: "MM / YYYY",
-                },
-                "card-cvv": {
-                  target: "#card-cvv",
-                  placeholder: "•••",
-                },
-                "submit": {
-                  text: "Submit",//Set text for Submit button
-                  target: "#submit"
-                }
-              }, 
-            })
-            
-            //For success
-            cardForm.on("token-success", (resp) => {
-                // add payment token to form as a hidden input 
-            
-                const token = document.createElement("input"); token.type = "hidden";
-                token.name = "temporary_token";
-                token.value = resp.temporary_token;
-                const form = document.getElementById("payment-form"); form.appendChild(token);
-            
-                alert(resp.temporary_token);
-            });
-            }
-    </script>
     
 </head>
 
@@ -76,5 +35,47 @@
         <div id="submit"></div>
     </form>
 </body>
+
+<script type="text/javascript">
+  function initGlobalPayments() {
+      GlobalPayments.configure({ 
+            "X-GP-Api-Key": "CBRZ0ddOrRyuQa7P5WvAaEWL04TSReEH",
+            "X-GP-Environment": "test" 
+          }); 
+      
+      
+      var cardForm = GlobalPayments.ui.form({   fields: { 
+          "card-number": { 
+            target: "#card-number", 
+                placeholder: "•••• •••• •••• ••••",
+          },
+          "card-expiration": {
+            target: "#card-expiration",
+            placeholder: "MM / YYYY",
+          },
+          "card-cvv": {
+            target: "#card-cvv",
+            placeholder: "•••",
+          },
+          "submit": {
+            text: "Submit",//Set text for Submit button
+            target: "#submit"
+          }
+        }, 
+      })
+      
+      //For success
+      cardForm.on("token-success", (resp) => {
+          // add payment token to form as a hidden input 
+      
+          const token = document.createElement("input"); token.type = "hidden";
+          token.name = "temporary_token";
+          token.value = resp.temporary_token;
+          const form = document.getElementById("payment-form"); form.appendChild(token);
+      
+          alert(resp.temporary_token);
+      });
+      }
+</script>
 
 </html>
