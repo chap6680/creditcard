@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>PayFields Clientside Sample</title>
+    <script src="https://js.dev.paygateway.com/secure_payment/v1/globalpayments.js"></script>
+</head>
+
+<body>
+    <form id="payment-form" action="/charge" method="post">
+        <!-- Other input fields to capture relevant data -->
+        <label for="billing-zip">Billing Zip Code</label>
+        
+        <input id="billing-zip" name="billing-zip" type="tel" />
+        <!-- Targets for the credit card form's fields -->
+        
+        <label for="card-number">Card Number</label>
+        <div id="card-number"></div>
+        <label for="card-expiration">Expiry Date</label>
+        <div id="card-expiration"></div>
+        <label for="card-cvv">CVV</label>
+        <div id="card-cvv"></div>
+        <div id="submit"></div>
+    </form>
+</body>
+<script type="text/javascript">
+    GlobalPayments.configure({
+        "X-GP-Api-Key": "<YOUR API KEY HERE>",
+        "X-GP-Environment": "test" //or "prod"
+    });
+    var cardForm = GlobalPayments.ui.form({
+        fields: {
+            "card-number": {
+                target: "#card-number", //renders field to <div id=”card-number”>       
+                placeholder: "•••• •••• •••• ••••", //Optional
+            },
+            "card-expiration": {
+                target: "#card-expiration",
+                placeholder: "MM / YYYY",
+            },
+            "card-cvv": {
+                target: "#card-cvv",
+                placeholder: "•••",
+            },
+            "submit": {
+                text: "Submit", //Set text for Submit button
+                target: "#submit"
+            }
+        },
+    });
+    //For success
+    //For success
+    cardForm.on("token-success", (resp) => {
+        // add payment token to form as a hidden input
+        const token = document.createElement("input");
+        token.type = "hidden";
+        token.name = "temporary_token";
+        token.value = resp.temporary_token;
+
+        // submit data to the integration's backend for processing
+        const form = document.getElementById("payment-form");
+        form.appendChild(token);
+        form.submit();
+    });
+    cardForm.on("token-error", (resp) => {
+        // show error to the consumer
+    });
+</script>
+
+</html>

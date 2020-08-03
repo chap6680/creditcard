@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFields Clientside Sample</title>
+
+    <script language=\"JavaScript\" src=\"https://js.paygateway.com/secure_payment/v1/globalpayments.js\"></script>
+
+    <script type="text/javascript">
+        function initGlobalPayments() {
+            GlobalPayments.configure({ 
+                  "X-GP-Api-Key": "CBRZ0ddOrRyuQa7P5WvAaEWL04TSReEH",
+                  "X-GP-Environment": "test" 
+                }); 
+            
+            
+            var cardForm = GlobalPayments.ui.form({   fields: { 
+                "card-number": { 
+                  target: "#card-number", 
+                      placeholder: "•••• •••• •••• ••••",
+                },
+                "card-expiration": {
+                  target: "#card-expiration",
+                  placeholder: "MM / YYYY",
+                },
+                "card-cvv": {
+                  target: "#card-cvv",
+                  placeholder: "•••",
+                },
+                "submit": {
+                  text: "Submit",//Set text for Submit button
+                  target: "#submit"
+                }
+              }, 
+            })
+            
+            //For success
+            cardForm.on("token-success", (resp) => {
+                // add payment token to form as a hidden input 
+            
+                const token = document.createElement("input"); token.type = "hidden";
+                token.name = "temporary_token";
+                token.value = resp.temporary_token;
+                const form = document.getElementById("payment-form"); form.appendChild(token);
+            
+                alert(resp.temporary_token);
+            });
+            }
+    </script>
+    
+</head>
+
+<body>
+    <form id="payment-form" action="/charge" method="post">
+        <!-- Other input fields to capture relevant data -->
+        <label for="billing-zip">Billing Zip Code</label></br>
+        
+<!--         <input id="billing-zip" name="billing-zip" type="tel" /></br></br>
+ -->        <!-- Targets for the credit card form's fields -->
+        
+        <label for="card-number">Card Number</label>
+        <div id="card-number"></div>
+        <input type="text" id="card-number" name="card-number"></br></br>
+
+         <label for="card-expiration">Expiry Date</label>
+        <div id="card-expiration"></div>
+<!--         <input type="text" id="card-expiration" name="card-expiration"></br></br>
+ -->
+        <label for="card-cvv">CVV</label>
+        <div id="card-cvv"></div>
+<!--         <input type="text" id="card-cvv" name="card-cvv"></br></br>
+ -->
+        <div id="submit"></div>
+    </form>
+</body>
+
+</html>
